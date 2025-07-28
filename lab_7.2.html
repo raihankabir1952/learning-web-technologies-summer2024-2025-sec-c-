@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+</head>
+<body>
+    <h2>Registration Form</h2>
+    <form method="post" action="/submit.php" enctype="multipart/form-data" onsubmit="return validateForm(event)">
+        Username:   <input type="text" name="username" value="" id="username" required minlength="2"><br>
+                    <p id="uError"></p>
+        <br>
+        Email:      <input type="text" name="email" value="" id="email" required>
+                    <p id="emailError" style="color: red;"></p>
+        <br>
+
+        <fieldset style="width: fit-content;">
+            <legend>Gender</legend>
+            <input type="radio" id="male" name="gender" value="male">
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female">
+            <label for="female">Female</label>
+            <input type="radio" id="others" name="gender" value="others">
+            <label for="others">Others</label>
+            <p id="genderError" style="color: red;"></p>
+        </fieldset>
+        <br>
+
+        <fieldset style="width: fit-content;">
+            <legend>Date of Birth</legend>
+            <input type="text" name="day" size="2" maxlength="2" placeholder="dd" id="day"> /
+            <input type="text" name="month" size="2" maxlength="2" placeholder="mm" id="month"> /
+            <input type="text" name="year" size="4" maxlength="4" placeholder="yyyy" id="year">
+            <p id="dobError" style="color: red;"></p>
+        </fieldset>
+        <br>
+
+        <fieldset style="width: fit-content;">
+            <legend>Degree</legend>
+            <input type="checkbox" id="ssc" name="degree" value="SSC">
+            <label for="ssc">SSC</label>
+            <input type="checkbox" id="hsc" name="degree" value="HSC">
+            <label for="hsc">HSC</label>
+            <input type="checkbox" id="bsc" name="degree" value="BSC">
+            <label for="bsc">BSC</label>
+            <p id="degreeError" style="color: red;"></p>
+        </fieldset>
+        <br>
+
+        <label for="blood">Blood Group:</label>
+        <select name="blood" id="blood">
+            <option value="">Select Blood Group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="O+">O+</option>
+        </select>
+        <p id="bloodError" style="color: red;"></p>
+        <br><br>
+
+        <fieldset style="width: fit-content;">
+            <legend>Profile Picture</legend>
+            <label for="id">ID:</label>
+            <input type="text" id="id" name="id"><br><br>
+
+            <label for="pic">Picture:</label>
+            <input type="file" id="pic" name="profile_pic">
+        </fieldset>
+        <br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+<script>
+    function validateForm(event) {
+        let username = document.getElementById("username").value;
+        let usernameError = document.getElementById("uError");
+        let email = document.getElementById('email').value;
+        let genderSelected = document.querySelector('input[name="gender"]:checked');
+        let degreeSelected = document.querySelectorAll('input[name="degree"]:checked');
+        let bloodGroup = document.getElementById('blood').value;
+
+        let day = document.getElementById('day').value;
+        let month = document.getElementById('month').value;
+        let year = document.getElementById('year').value;
+
+        let emailError = document.getElementById('emailError');
+        let genderError = document.getElementById('genderError');
+        let dobError = document.getElementById('dobError');
+        let degreeError = document.getElementById('degreeError');
+        let bloodError = document.getElementById('bloodError');
+
+        usernameError.textContent = "";
+        emailError.textContent = "";
+        genderError.textContent = "";
+        dobError.textContent = "";
+        degreeError.textContent = "";
+        bloodError.textContent = "";
+
+        for (let i = 0; i < username.length; i++) {
+            let charCode = username.charCodeAt(i);
+
+
+            if (!((charCode >= 65 && charCode <= 90) ||  
+                  (charCode >= 97 && charCode <= 122) || 
+                  charCode === 45 || 
+                  charCode === 46)) { 
+                usernameError.textContent = "Username must contain only alphabets (A-Z, a-z), hyphens (-), and periods (.).";
+                usernameError.style.color = "red";
+                event.preventDefault();  
+                return false;
+            }
+        }
+
+        if (email === "") {
+            emailError.textContent = "Email cannot be empty.";
+            emailError.style.color = "red";
+            event.preventDefault(); 
+            return false;
+        }
+
+        var emailParts = email.split('@');
+        if (emailParts.length !== 2 || emailParts[1] !== 'gmail.com') {
+            emailError.textContent = "Please enter a valid email address that ends with '@gmail.com'.";
+            emailError.style.color = "red";
+            event.preventDefault();
+            return false;
+        }
+        if (!genderSelected) {
+            genderError.textContent = "Please select your gender.";
+            genderError.style.color = "red";
+            event.preventDefault(); 
+            return false;
+        }
+
+        if (day === "" || month === "" || year === "") {
+            dobError.textContent = "Date of Birth cannot be empty.";
+            dobError.style.color = "red";
+            event.preventDefault(); 
+            return false;
+        }
+
+        if (parseInt(day) < 1 || parseInt(day) > 31 || isNaN(day)) {
+            dobError.textContent = "Please enter a valid day (01-31).";
+            dobError.style.color = "red";
+            event.preventDefault(); 
+            return false;
+        }
+
+        if (parseInt(month) < 1 || parseInt(month) > 12 || isNaN(month)) {
+            dobError.textContent = "Please enter a valid month (01-12).";
+            dobError.style.color = "red";
+            event.preventDefault(); 
+            return false;
+        }
+
+        if (parseInt(year) < 1990 || parseInt(year) > 2016 || isNaN(year)) {
+            dobError.textContent = "Please enter a valid year (1990-2016).";
+            dobError.style.color = "red";
+            event.preventDefault(); 
+            return false;
+        }
+
+        if (degreeSelected.length === 0) {
+            degreeError.textContent = "Please select at least one degree.";
+            degreeError.style.color = "red";
+            event.preventDefault(); 
+            return false;
+        }
+
+        if (bloodGroup === "") {
+            bloodError.textContent = "Please select a blood group.";
+            bloodError.style.color = "red";
+            event.preventDefault(); 
+            return false;
+        }
+
+        return true; 
+    }
+</script>
+
+
+
+
+
+</body>
+</html>
