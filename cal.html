@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Basic Calculator</title>
+</head>
+<body>
+
+  <div align="center">
+    <br><br><br><br><br>
+    <div id="display" style="font-size: 30px; padding: 10px; border: 1px solid black; width: 250px; text-align: right;">0</div>
+    <table id="buttonArea"></table>
+  </div>
+
+  <script>
+    let display = document.getElementById("display");
+    let buttonArea = document.getElementById("buttonArea");
+
+    let buttons = [
+      'C', '1', '2', '3',
+      '4', '5', '6', '+',
+      '7', '8', '9', '-',
+      '0', '*', '/', '='
+    ];
+
+    var row;
+    for (var i = 0; i < buttons.length; i++) {
+      if (i % 4 === 0) {
+        row = document.createElement("tr");
+        buttonArea.appendChild(row);
+      }
+
+      let cell = document.createElement("td");
+      let btn = document.createElement("button");
+      btn.innerText = buttons[i];
+      btn.style.fontSize = "20px";
+      btn.style.padding = "15px 20px";
+      btn.style.margin = "4px";
+
+      btn.onclick = function() {
+        let val = this.innerText;
+
+        if (val === 'C') {
+          display.innerText = '0';
+        } else if (val === '=') {
+          let result = eval(display.innerText);
+          display.innerText = result;
+        } else {
+          if (display.innerText === '0' || display.innerText === 'Error') {
+            display.innerText = val;
+          } else {
+            display.innerText += val;
+          }
+        }
+      };
+
+      cell.appendChild(btn);
+      row.appendChild(cell);
+    }
+  </script>
+
+</body>
+</html>
